@@ -46,6 +46,71 @@
 						"title": "filename",
 						"type": "string"
 					}
+				},
+        "TranslationViewer.prefix": {
+					"type": "string",
+					"default": "",
+					"description": "Common prefix of translation keys",
+					"scope": "workspace"
+				},
+        "TranslationViewer.fileTypes": {
+					"type": "array",
+					"description": "Specify the file types to scan for translation keys",
+					"scope": "workspace",
+          "default": [
+            "javascript",
+            "typescript",
+            "html"
+          ],
+          "items": {
+            "type": "string",
+            "enum": [
+              "javascript",
+              "typescript",
+              "html",
+              "csharp",
+              "java",
+              "php",
+              "python",
+              "ruby",
+              "swift",
+              "go",
+              "kotlin",
+              "rust",
+              "dart",
+              "objective-c",
+              "scala",
+              "shell",
+              "bash",
+              "powershell",
+              "sql",
+              "xml",
+              "json"
+            ],
+            "default": [
+              "javascript",
+              "typescript",
+              "html",
+              "csharp",
+              "java",
+              "php",
+              "python",
+              "ruby",
+              "swift",
+              "go",
+              "kotlin",
+              "rust",
+              "dart",
+              "objective-c",
+              "scala",
+              "shell",
+              "bash",
+              "powershell",
+              "sql",
+              "xml",
+              "json"
+            ]
+          }
 				}
 			}
 		}
