@@ -31,13 +31,14 @@ let info: {
 };
 
 let translationFileList: string[] = [];
+let hoverProvider: vscode.Disposable | undefined;
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
 
-	loadConfig();
+	// loadConfig(context);
 
 	const rescanTranslationsCommand = vscode.commands.registerCommand('translationviewer.rescanTranslations', () => {
-		loadConfig();
+		loadConfig(context);
 	});
 
 	const jumpToTranslationCommand = vscode.commands.registerCommand('translationviewer.jumpToTranslation', () => {
@@ -49,13 +50,58 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	});
 
 	vscode.workspace.onDidChangeConfiguration(_ => {
-		const currentConfig = vscode.workspace.getConfiguration('translationPeek');
+		const currentConfig = vscode.workspace.getConfiguration('TranslationViewer');
 		if (config !== currentConfig) {
-			loadConfig();
+			loadConfig(context);
 		}
 	});
 
-	let hoverProvider = vscode.languages.registerHoverProvider(info.fileTypes, {
+	// let hoverProvider = vscode.languages.registerHoverProvider(info.fileTypes, {
+	// 	provideHover(document, position, _) {
+	// 		const wordBorders = document.getWordRangeAtPosition(position, /[A-Z_\.0-9a-z]+/);
+	// 		if (wordBorders) {
+	// 			const hoveredLine = document.lineAt(wordBorders.start).text;
+	// 			const hoveredWord = hoveredLine.substring(wordBorders?.start.character, wordBorders?.end.character);
+	// 			if (!info.prefix || hoveredWord.startsWith(info.prefix)) {
+	// 				const translations = Object.entries(info.content)
+	// 					.map(element => getValue(element[1], hoveredWord, info.translationValueMode === 'first'))
+	// 					.filter(trans => trans?.length);
+	// 				const hoverText = new vscode.MarkdownString(translations?.join('\\\r\n'));
+
+	// 				if(hoverText.value === '\\\r\n') return;
+					
+	// 				if (hoveredWord) {
+	// 					const translationKey = hoveredWord;
+	// 					const translationValue = hoverText.value;
+
+	// 					const fileLinks: string[] = [];
+	// 					translationFileList.forEach(file => {
+	// 						const fileLink = `[${file}](${vscode.Uri.file(file)})`;
+	// 						fileLinks.push(fileLink);
+	// 					});
+
+	// 					const translationTooltip = new vscode.MarkdownString(`**Translation Key:** ${translationKey}\n\n**Translation Value:**\n\n${translationValue}\n\n**File:**\n\n${fileLinks.join('\n\n')}`);
+	// 					translationTooltip.isTrusted = true;
+	// 					return translationTooltip && new vscode.Hover(translationTooltip, wordBorders);
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// });
+
+
+	context.subscriptions.push(rescanTranslationsCommand);
+	context.subscriptions.push(jumpToTranslationCommand);
+	context.subscriptions.push(openTranslationFileCommand);
+	// context.subscriptions.push(hoverProvider);
+}
+
+function registerHoverProvider(context: vscode.ExtensionContext) {
+	if (hoverProvider) {
+		hoverProvider.dispose();
+	}
+
+	hoverProvider = vscode.languages.registerHoverProvider(info.fileTypes, {
 		provideHover(document, position, _) {
 			const wordBorders = document.getWordRangeAtPosition(position, /[A-Z_\.0-9a-z]+/);
 			if (wordBorders) {
@@ -88,29 +134,32 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 			}
 		}
 	});
-	
-	context.subscriptions.push(rescanTranslationsCommand);
-	context.subscriptions.push(jumpToTranslationCommand);
-	context.subscriptions.push(openTranslationFileCommand);
-	context.subscriptions.push(hoverProvider);
+
+	context.subscriptions.push({ dispose: () => hoverProvider?.dispose() });
 }
 
-async function loadConfig(): Promise<void> {
+
+async function loadConfig(context: vscode.ExtensionContext): Promise<void> {
 	const currentConfig = vscode.workspace.getConfiguration('TranslationViewer');
 	config = currentConfig;
 	info.prefix = getTranslationPrefix(config);
 	info.translationValueMode = getTranslationValueMode(config);
 	info.fileTypes = getFileTypes(config);
 
-	getTranslationFilesFromConfig();
+	translationFileList = [];
+
+
+	await getTranslationFilesFromConfig();
+	registerHoverProvider(context);
 }
 
 async function getTranslationFilesFromConfig(): Promise<void> {
-	translationFileList = [];
 	const fileNames = getTranslationFileNames(config);
 	const files = await Promise.all(fileNames.map(fileName => getTranslationFile(fileName)));
 	const contents = await Promise.all(files.filter(f => !!f).map(async (file, i) => ({ [fileNames[i].split('.')[0]]: await getTranslationContent(file) })));
 	info.content = contents.reduce((p, c) => ({ ...p, ...c }), {});
+
+	console.log(files);
 
 	files.forEach(file => {
 		if(file) {
@@ -122,7 +171,7 @@ async function getTranslationFilesFromConfig(): Promise<void> {
 
 async function getTranslationFile(fileName: string): Promise<vscode.Uri> {
 	return await vscode.workspace.findFiles(`**/${fileName}`).then(files => {
-		files = files?.filter(file => !file.path.includes('node_modules'));
+		files = files?.filter(file => !file.path.includes('node_modules') && !file.path.includes('dist'));
 		if (!files || !files[0]) {
 			vscode.window.showWarningMessage(`TranslationViewer: No translation file for ${fileName} could be found!`);
 		}
@@ -146,3 +195,5 @@ const getTranslationPrefix = (config: vscode.WorkspaceConfiguration): string => 
 const getTranslationFileNames = (config: vscode.WorkspaceConfiguration): string[] => config.get('jsonNames', ['translation.json']) || ['translation.json'];
 const getTranslationValueMode = (config: vscode.WorkspaceConfiguration): 'first' | 'all' => (config.get('take', 'first') as any).toString() || 'first';
 const getFileTypes = (config: vscode.WorkspaceConfiguration): vscode.DocumentSelector => config.get('fileTypes', ['typescript', 'javascript']) || ['typescript', 'javascript'];
+
+export function deactivate(): void{}

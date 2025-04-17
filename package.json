@@ -12,10 +12,28 @@
   "categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onLanguage:javascript",
+  "activationEvents": [
+    "onLanguage:javascript",
     "onLanguage:typescript",
-    "onLanguage:html"
+    "onLanguage:html",
+    "onLanguage:csharp",
+    "onLanguage:java",
+    "onLanguage:php",
+    "onLanguage:python",
+    "onLanguage:ruby",
+    "onLanguage:swift",
+    "onLanguage:go",
+    "onLanguage:kotlin",
+    "onLanguage:rust",
+    "onLanguage:dart",
+    "onLanguage:objective-c",
+    "onLanguage:scala",
+    "onLanguage:shell",
+    "onLanguage:bash",
+    "onLanguage:powershell",
+    "onLanguage:sql",
+    "onLanguage:xml",
+    "onLanguage:json"
 	],
   "main": "./out/extension.js",
   "contributes": {
@@ -87,28 +105,28 @@
               "xml",
               "json"
             ],
-            "default": [
-              "javascript",
-              "typescript",
-              "html",
-              "csharp",
-              "java",
-              "php",
-              "python",
-              "ruby",
-              "swift",
-              "go",
-              "kotlin",
-              "rust",
-              "dart",
-              "objective-c",
-              "scala",
-              "shell",
-              "bash",
-              "powershell",
-              "sql",
-              "xml",
-              "json"
+            "markdownEnumDescriptions": [
+              "JavaScript",
+              "TypeScript",
+              "HTML",
+              "C#",
+              "Java",
+              "PHP",
+              "Python",
+              "Ruby",
+              "Swift",
+              "Go",
+              "Kotlin",
+              "Rust",
+              "Dart",
+              "Objective-C",
+              "Scala",
+              "Shell Script",
+              "Bash Script",
+              "PowerShell Script",
+              "SQL Script",
+              "XML File",
+              "JSON File"
             ]
           }
 				}
