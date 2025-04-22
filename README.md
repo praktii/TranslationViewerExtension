@@ -72,6 +72,11 @@ Got ideas or found a bug? PRs and issues are welcome!
 
 This project is licensed under the [MIT License](LICENSE).
 
+## 📸 Some screenshots
+
+![Settings](https://raw.githubusercontent.com/praktii/TranslationViewerExtension/master/assets/readme/readme_settings_json.png)
+![Tooltip](https://raw.githubusercontent.com/praktii/TranslationViewerExtension/master/assets/readme/readme_hoverexample.png)
+
 ---
 
 > Built with ❤️ by [@praktii](https://github.com/praktii)
