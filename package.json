@@ -4,6 +4,7 @@
   "license": "MIT",
   "displayName": "TranslationViewer",
   "description": "Extension that reveals the real values behind a translation key via tooltip.",
+  "icon": "images/icon.png",
   "version": "1.0.0",
   "engines": {
     "vscode": "^1.99.0"
