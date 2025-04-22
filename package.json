@@ -1,11 +1,10 @@
 {
   "name": "translationviewer",
   "publisher": "praktii",
-  "repository": "github:praktii/TranslationViewer",
   "license": "MIT",
   "displayName": "TranslationViewer",
   "description": "Extension that reveals the real values behind a translation key via tooltip.",
-  "version": "0.0.1-aplha",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.99.0"
   },
@@ -132,6 +131,10 @@
 				}
 			}
 		}
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/praktii/TranslationViewerExtension"
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
