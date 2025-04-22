@@ -74,7 +74,8 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 📸 Some screenshots
 
-![Settings](https://raw.githubusercontent.com/praktii/TranslationViewerExtension/master/assets/readme/readme_settings_json.png)
+![Settings via json](https://raw.githubusercontent.com/praktii/TranslationViewerExtension/master/assets/readme/readme_settings_json.png)
+![Setting via menu](https://raw.githubusercontent.com/praktii/TranslationViewerExtension/master/assets/readme/readme_settings_menu.png)
 ![Tooltip](https://raw.githubusercontent.com/praktii/TranslationViewerExtension/master/assets/readme/readme_hoverexample.png)
 
 ---
