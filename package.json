@@ -6,6 +6,9 @@
   "description": "Extension that reveals the real values behind a translation key via tooltip.",
   "icon": "assets/icon.png",
   "version": "1.0.0",
+  "sponsor": {
+    "url": "https://github.com/sponsors/praktii"
+  },
   "engines": {
     "vscode": "^1.99.0"
   },
